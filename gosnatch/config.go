@@ -90,6 +90,7 @@ func InitConfig() {
     viper.SetDefault("UpdateOnStart", true)
     viper.SetDefault("Port", 1313)
     viper.SetDefault("LogJSON", false)
+    viper.SetDefault("Language", "en-US")
     viper.SetDefault("Devel", false)
     viper.SetDefault("TvdbUrl", "https://tvdb.gosnatch.me")
     viper.SetDefault("TvdbKey", "BTLPI2H0LITPW71J") //goSnatch's api key

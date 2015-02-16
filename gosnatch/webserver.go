@@ -1,6 +1,7 @@
 package gosnatch
 
 import (
+    "encoding/json"
     "fmt"
     "github.com/astaxie/beego/orm"
     "github.com/dustin/go-humanize"
@@ -9,6 +10,9 @@ import (
     "github.com/gin-gonic/gin"
     "github.com/gosnatch/gosnatch/tvdb"
     _ "github.com/mattn/go-sqlite3"
+    "github.com/nicksnyder/go-i18n/i18n"
+    "github.com/nicksnyder/go-i18n/i18n/language"
+    "github.com/nicksnyder/go-i18n/i18n/translation"
     log "github.com/sirupsen/logrus"
     "github.com/spf13/viper"
     "html/template"
@@ -78,12 +82,31 @@ func getApiKey(s string) string {
 //load templates from the asset that go-bindata provides
 func loadTemplates(list ...string) *template.Template {
 
+    //load languages from go-bindata assets folder
+    for _, curlang := range []string{"de-DE", "en-US"} {
+        transString, _ := Asset("assets/translations/" + curlang + ".all.json")
+        var transUnmarshal []map[string]interface{}
+        err := json.Unmarshal(transString, &transUnmarshal)
+        if err != nil {
+            fmt.Println(err)
+        }
+
+        for _, y := range transUnmarshal {
+            trans, _ := translation.NewTranslation(y)
+            lang := language.MustParse(curlang)
+            i18n.AddTranslation(lang[0], trans)
+        }
+    }
+
+    T, _ := i18n.Tfunc(viper.GetString("Language"))
+
     templates := template.New("")
 
     funcMap := template.FuncMap{
         "ApiKey":       getApiKey,
         "humanizeTime": func(a time.Time) string { return humanize.Time(a) },
         "title":        func(a string) string { return strings.Title(a) },
+        "T":            T,
     }
 
     templates.Funcs(funcMap)

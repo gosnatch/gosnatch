@@ -1,5 +1,5 @@
 
-ASSET_DIRS=assets/js assets/js/external assets/js/vendor assets/css assets/images assets/templates assets/fonts
+ASSET_DIRS=assets/js assets/js/external assets/js/vendor assets/css assets/images assets/templates assets/fonts assets/translations
 
 ARCH=$(shell uname -m)
 OS=$(shell uname -s)
@@ -54,6 +54,12 @@ run: assets-debug
 
 debug: assets-debug
 	export SNT_DEVEL=true && export SNT_DEBUG=true && go run $(GOFLAGS) main.go
+
+trans:
+	cd ./assets/translations && goi18n *.all.json
+
+trans-update:
+	cd ./assets/translations && goi18n *.all.json *.untranslated.json
 
 clean:
 	rm -f dist/*

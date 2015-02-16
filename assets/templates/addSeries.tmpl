@@ -55,21 +55,21 @@
           <div class="season-wrapper ">
             <div class="btn-group col-sm-12" role="group" aria-label="..." style="margin-bottom: 20px">
               <div class="row">
-                <button data-toggle="modal" data-target="#addExistingSeries" type="button" class="btn btn-default col-sm-9"><i class="fa fa-hdd-o fa-lg"></i> Import existing series on disk</button>
-                <button type="button" class="btn btn-default col-sm-3"><i class="fa fa-play fa-lg"></i> Add new series</button>
+                <button data-toggle="modal" data-target="#addExistingSeries" type="button" class="btn btn-default col-sm-9"><i class="fa fa-hdd-o fa-lg"></i> {{ T "import_series_button" }}</button>
+                <button type="button" class="btn btn-default col-sm-3"><i class="fa fa-play fa-lg"></i> {{ T "add_series_button" }}</button>
               </div>
             </div>
             <div class="header">
 
 
-              <h2>Serie Hinzufügen</h2>
+              <h2> {{ T "search_series" }}</h2>
             </div>
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-                <input type="text" class="form-control" id="term" placeholder="Nach einer Serie suchen...">
+                <input type="text" class="form-control" id="term" placeholder='{{ T "search_series" }}...'>
               </div>
-               <p class="text-center lead">You can search for tvdb id by useing tvdb: as prefix</p>
+               <p class="text-center lead">{{ T "search_series_help" }}</p>
             </div>
 
             <div class="select-series" id="load-series-data">
@@ -89,10 +89,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Select Folder</h4>
+            <h4 class="modal-title">{{ T "select_folder_head" }}</h4>
           </div>
           <div class="modal-body">
-            <div class="alert alert-info"><p>Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import</p></div>
+            <div class="alert alert-info"><p>{{ T "select_folder_help" }}</p></div>
 
             <div class="form-group">
               <div class="input-group">
@@ -107,7 +107,7 @@
               </div>
             </div>
 
-            <h3>Recent Folders</h3>
+            <h3>{{ T "recent_folders" }}</h3>
             <table class="table" id="rootFolders">
             </table>
           </div>

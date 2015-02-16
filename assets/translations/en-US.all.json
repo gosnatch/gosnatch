@@ -1,0 +1,30 @@
+[
+  {
+    "id": "add_series_button",
+    "translation": "add series"
+  },
+  {
+    "id": "import_series_button",
+    "translation": "Add existing series from disk"
+  },
+  {
+    "id": "recent_folders",
+    "translation": "Recent Folders"
+  },
+  {
+    "id": "search_series",
+    "translation": "search tvdb for series"
+  },
+  {
+    "id": "search_series_help",
+    "translation": "You can search for tvdb id by useing tvdb: as prefix"
+  },
+  {
+    "id": "select_folder_head",
+    "translation": "Select Folder"
+  },
+  {
+    "id": "select_folder_help",
+    "translation": "Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import"
+  }
+]
