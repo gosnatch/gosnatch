@@ -239,7 +239,7 @@ func isNeededRelease(release *Release, show *TvShow) bool {
         for _, ep := range wanted {
             if ep.Season == season_num && ep.Episode == ep_num {
                 log.WithFields(log.Fields{"show": md["series_name"], "season": season_num, "episode": ep_num}).Infof("%s matches", release.Title)
-                release.Episode = &ep
+                release.Episode = ep
                 return true
             }
         }

@@ -28,8 +28,6 @@ type SafeLogger struct {
 }
 
 func (f *SafeLogger) Format(entry *log.Entry) ([]byte, error) {
-    fmt.Println(entry.Message)
-    fmt.Println((entry.Message))
     entry.Message = cleanLogMessage(entry.Message)
     for z, y := range entry.Data {
         switch y := y.(type) {

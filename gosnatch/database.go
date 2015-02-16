@@ -240,8 +240,8 @@ func (show *TvShow) EpisodeCount() int {
 }
 
 // list of wanted episodes
-func (show *TvShow) Wanted() []TvEpisode {
-    wanted := []TvEpisode{}
+func (show *TvShow) Wanted() []*TvEpisode {
+    wanted := []*TvEpisode{}
     o := orm.NewOrm()
     o.QueryTable(&TvEpisode{}).Filter("tv_show_id", &show.Id).Filter("status", 0).Exclude("first_aired__isnull", true).Exclude("first_aired", time.Unix(0, 0)).All(&wanted)
     return wanted
@@ -367,7 +367,7 @@ type Release struct {
     Provider      Provider
     Status        int // 1 = snatched, 2 = downloaded, 3 = failed
     Episode       *TvEpisode
-    Season        []TvEpisode
+    Season        []*TvEpisode
     SeasonNum     int
 }
 
@@ -387,6 +387,7 @@ func (a ByQuality) Less(i, j int) bool {
 }
 
 // mark release as snatched
+// TODO: clean this! for complete seasons move this to a seperate function?
 func (rel Release) markSnatched() {
     o := orm.NewOrm()
 
@@ -394,7 +395,7 @@ func (rel Release) markSnatched() {
         for _, e := range rel.Season {
             if e.Season == rel.SeasonNum {
                 e.Status = STATE_SNATCHED
-                o.Update(&e)
+                o.Update(e)
             }
         }
     } else {
@@ -405,29 +406,48 @@ func (rel Release) markSnatched() {
     //fmt.Println(rel)
 
     //hist := History{ReleaseName: rel.Title, Action: 1, Date: 0, ShowId: rel.Episode.TvShow.Id, Quality: rel.Quality, Resource: "dafuq", Provider: rel.Provider.Name, Version: 1}
-    hist := History{}
-    hist.Title = rel.Title
-    hist.Action = 1
-    hist.ProviderName = rel.Provider.Name
 
-    quali := QualityDefinitions{}
-    o.QueryTable(&QualityDefinitions{}).Filter("quality", rel.Quality).One(&quali)
-
-    hist.Quality = &quali
     if len(rel.Season) > 0 {
-        hist.Season = rel.SeasonNum
-        hist.Episode = 0
+        for _, e := range rel.Season {
+            if e.Season == rel.SeasonNum {
+                hist := History{}
+                hist.Season = e.Season
+                hist.Episode = e.Episode
+                hist.Title = rel.Title
+                hist.Action = STATE_SNATCHED
+                hist.ProviderName = rel.Provider.Name
+
+                quali := QualityDefinitions{}
+                o.QueryTable(&QualityDefinitions{}).Filter("quality", rel.Quality).One(&quali)
+                hist.Quality = &quali
+                hist.TvEpisode = e
+                hist.Link = rel.Link
+                hist.QualityString = quali.Title
+                hist.TvShow = e.TvShow
+                o.Insert(&hist)
+            }
+        }
+
     } else {
+        hist := History{}
         hist.Season = rel.Episode.Season
         hist.Episode = rel.Episode.Episode
+
+        hist.Title = rel.Title
+        hist.Action = STATE_SNATCHED
+        hist.ProviderName = rel.Provider.Name
+
+        quali := QualityDefinitions{}
+        o.QueryTable(&QualityDefinitions{}).Filter("quality", rel.Quality).One(&quali)
+        hist.Quality = &quali
+        hist.TvEpisode = rel.Episode
+        hist.Link = rel.Link
+        hist.QualityString = quali.Title
+        hist.TvShow = rel.Episode.TvShow
+
+        o.Insert(&hist)
     }
 
-    hist.TvEpisode = rel.Episode
-    hist.Link = rel.Link
-    hist.QualityString = quali.Title
-    hist.TvShow = rel.Episode.TvShow
-
-    o.Insert(&hist)
 }
 
 type TvEpisode struct {
