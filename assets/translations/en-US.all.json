@@ -4,6 +4,14 @@
     "translation": "add series"
   },
   {
+    "id": "btn_close",
+    "translation": "Close"
+  },
+  {
+    "id": "btn_ok",
+    "translation": "Ok"
+  },
+  {
     "id": "import_series_button",
     "translation": "Add existing series from disk"
   },
@@ -26,5 +34,8 @@
   {
     "id": "select_folder_help",
     "translation": "Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import"
+  }, {
+  	"id": "season_string",
+  	"translation": "Season {{.Count}}"
   }
 ]

@@ -97,7 +97,7 @@
         <div class="col-sm-12">
           <div class="season-wrapper ">
             <div class="header">
-              <h2>Staffel {{$season.Season}} <span class="badge">{{ $season.DownloadStatus }}</span></h2>
+              <h2>{{ T "season_string" $season.Season}} <span class="badge">{{ $season.DownloadStatus }}</span></h2>
             </div>
                 <p class="expand-season"><i class="glyphicon {{ if gt $v 0 }} glyphicon-chevron-down {{ else }} glyphicon-chevron-up {{ end }}"></i></p>
 
@@ -157,14 +157,14 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ T "btn_close" }}"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{{ .show.ShowName }}</h4>
       </div>
       <div class="modal-body">
         <p><div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ T "btn_close" }}</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

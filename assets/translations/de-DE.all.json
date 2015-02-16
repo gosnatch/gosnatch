@@ -1,0 +1,41 @@
+[
+  {
+    "id": "add_series_button",
+    "translation": "Serie hinzufügen"
+  },
+  {
+    "id": "btn_close",
+    "translation": "Schließen"
+  },
+  {
+    "id": "btn_ok",
+    "translation": "Ok"
+  },
+  {
+    "id": "import_series_button",
+    "translation": "Vorhandene Serie Importieren"
+  },
+  {
+    "id": "recent_folders",
+    "translation": "Kurzlich hinzugefügte Ordner"
+  },
+  {
+    "id": "search_series",
+    "translation": "Nach Serie suchen"
+  },
+  {
+    "id": "search_series_help",
+    "translation": "Du kannst auch per tvdb id suchen indem du den prefix tvdb: benutzt"
+  },
+  {
+    "id": "select_folder_head",
+    "translation": "Ordner auswählen"
+  },
+  {
+    "id": "select_folder_help",
+    "translation": "Gib den Pfad zu deinem Haupt-Serien Ordner ein, du kannst dann auswählen welche Serien du importieren willst"
+  }, {
+  	"id": "season_string",
+  	"translation": "Staffel {{.Count}}"
+  }
+]
