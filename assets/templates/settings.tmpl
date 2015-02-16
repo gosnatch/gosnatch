@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../images/favicon.ico">
+
+    <title>goSnatch</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootswatch.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="settings-view">
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">goSnatch</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="/shows">Shows</a></li>
+            <li class="active"><a href="#contact">Settings</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+
+
+      <div class="row season-1">
+        <div class="col-sm-12">
+          <div class="profile-options">
+
+            <div id="profile-1">
+              <form class="form-horizontal">
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="name" placeholder="720p Bluray">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="required" class="col-sm-2 control-label">Required Regex</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="required" placeholder=".*must.contain.*">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="ignore" class="col-sm-2 control-label">Ignore Regex</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="irgnore" placeholder=".*must.not.contain.*">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="ignore" class="col-sm-2 control-label">Ignore Regex</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="irgnore" placeholder=".*must.not.contain.*">
+    </div>
+  </div>
+  <div class="quality">
+
+  </div>
+
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div>
+</form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+    </div><!-- /.container -->
+    <div id="ohsnap"></div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <script src="/assets/js/vendor/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/external/ohsnap.js"></script>
+    <script src="/assets/js/main.js"></script>
+    {{template "script"}}
+    <script>
+    function appendQualitys(data) {
+      html = ''
+      for (var i = data.length - 1; i >= 0; i--) {
+        html = html + '<div class="form-group"><div class="col-sm-offset-2 col-sm-10"><div class="checkbox"><label><input type="checkbox"> '+data[i].Title+'</label></div></div></div>'
+      };
+
+      $('.quality').append(html)
+    }
+    $.getJSON("/api/quality", appendQualitys)
+
+    </script>
+  </body>
+</html>

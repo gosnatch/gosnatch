@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../images/favicon.ico">
+
+    <title>goSnatch</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootswatch.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="background: url(/cache/images/fanart/{{.show.TvdbId}}_small.jpg); background-size: cover; background-width: 100%; background-repeat: no-repeat; background-attachment:fixed;" data-id="{{ .show.Id }}">
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">goSnatch</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/">Home</a></li>
+            <li class="active"><a href="/shows">Shows</a></li>
+            <li><a href="#contact">Settings</a></li>
+            <li><a href="/calendar">Calendar</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container single-show-view">
+      <img src="/cache/images/banner/{{.show.TvdbId}}_small.jpg" class="img-responsive visible-xs">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="overview-wrapper">
+            <div class="row">
+              <div class="col-sm-8">
+                <h2>{{ .show.ShowName}}</h2>
+              </div>
+              <div class="col-sm-4">
+                <ul class="list-inline text-right" style="font-size: 25px">
+                  <li><span class="glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="top" title="Force refresh load new infos from and files from disk"></span></li>
+                  <li><span class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="top" title="Edit Show settings"></span></li>
+                  <li><span class="glyphicon text-danger glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Delete Show"></span></li>
+                </ul>
+              </div>
+            </div>
+            <p>{{ .show.Overview}}</p>
+
+
+
+            <div class="show-meta-info row">
+              <ul class="list-inline col-sm-7">
+                <li><span class="label label-default">{{ .show.QualityPreset.Name }}</span></li>
+                <li><span class="label label-primary">{{ .show.Network }}</span> </li>
+                <li><span class="label label-primary">{{ .show.Runtime }} minutes</span> </li>
+                <li><span class="label label-primary" data-toggle="tooltip" data-placement="top" title="Size of all episodes on disk">{{ .show.HumanizeSize }}</span> </li>
+              </ul>
+
+              <ul class="list-inline col-sm-5 text-right">
+                <li><a class="label label-default" href="http://thetvdb.com/?tab=series&id={{.show.TvdbId}}" target="_blank">The TVDB</a></li>
+                <li><a class="label label-default" href="http://imdb.com/title/{{.show.ImdbId}}" target="_blank">IMDB</a></li>
+                <li><a class="label label-default" href="http://trakt.tv/shows/{{.show.Slug}}" target="_blank">Trakt</a></li>
+                {{ if .show.TvrageId }}
+                <li><a class="label label-default" href="http://tvrage.com/shows/id-{{.show.TvrageId}}" target="_blank">TV Rage</a></li>
+                {{ end }}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {{ range $v, $season := .seasons}}
+
+
+
+      <div class="row season-{{$season.Season}} {{ if gt $v 0 }} collapsed {{ end }}">
+        <div class="col-sm-12">
+          <div class="season-wrapper ">
+            <div class="header">
+              <h2>Staffel {{$season.Season}} <span class="badge">{{ $season.DownloadStatus }}</span></h2>
+            </div>
+                <p class="expand-season"><i class="glyphicon {{ if gt $v 0 }} glyphicon-chevron-down {{ else }} glyphicon-chevron-up {{ end }}"></i></p>
+
+            <div class="table-responsive">
+            <table class="table table">
+                    <thead>
+                        <tr>
+                            <th class=""></th>
+                            <th class="">Name</th>
+                            <th class="">Airdate</th>
+                            <th class="">Status</th>
+                             <th class=""></th>
+                                                    </tr>
+                </thead>
+                <tbody>
+
+                {{ range $episode := $season.Episodes }}
+                  <tr data-series="{{ $episode.Id }}" data-episode="{{$episode.Episode}}" data-season="{{$episode.Season}}">
+                        <td>{{$episode.Episode}}</td>
+                        <td>{{$episode.Name}}</td>
+                        <td>{{if $episode.FirstAired.IsZero }} never {{ else }} {{ $episode.FirstAired.Format "02.01.2006" }} {{ end }}</td>
+                        <td>
+                          {{ if ge $episode.Status 2 }}{{/* Downloaded, Archived etc */}}
+                            <i class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="Episode downloaded"></i>
+                            <small>{{ $episode.QualityString }}</small>
+                          {{ else if or ($episode.FirstAired.IsZero) (not $episode.Aired) }} {{/* No Airdate or Unaired */}}
+                           <i class="glyphicon glyphicon-time" data-toggle="tooltip" data-placement="top" title="Episode hasn't aired yet"></i>
+                          {{ else if eq $episode.Status 1 }} {{/* Snatched */}}
+                            <i class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="Episode snatched"></i>
+                          {{ else if and (eq $episode.Status 0) ($episode.Aired ) }} {{/* Wanted and Aired */}}
+                            <i class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="Episode is wanted"></i>
+                          {{ else }} {{/* Downloaded, Archived etc */}}
+                            <i class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="Episode downloaded"></i>
+                          {{ end }}
+                        </td>
+                        <td>
+                          <span class="glyphicon glyphicon-search" data-toggle="tooltip" data-placement="top" title="Automatic search"></span>
+                          <span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Manual search"></span>
+                        </td>
+                </tr>
+                {{ end }}
+
+
+                </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+      {{ end }}
+
+    </div><!-- /.container -->
+    <div id="ohsnap"></div>
+    <div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{ .show.ShowName }}</h4>
+      </div>
+      <div class="modal-body">
+        <p><div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/external/ohsnap.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    {{template "script"}}
+    <script>
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+
+    function searchEpisode(data) {
+
+        console.log(data)
+
+        if (data && data.length > 0) {
+          html = '<div class="table-responsive"><table class="table manual-search"><tr><th>Title</th><th>Quali</th><th>Indexer</th></tr>';
+          for (var i = data.length - 1; i >= 0; i--) {
+            html = html + '<tr data-title="' + data[i].Title + ' " data-url="'+data[i].Link + '"><td> ' + data[i].Title + ' </td><td><span class="label label-default">' + data[i].QualityString +  '</span></td><td>' +data[i].Provider.Name +'</td></tr></p>';
+          };
+          html = html +  '</table></div>';
+        } else {
+          html = "<h2>No episode found</h2>"
+        }
+        console.log(html)
+        $('.modal-body').html(html)
+    }
+
+    $('.glyphicon-search').click(function(){
+        $par = $(this).parents('tr');
+        $par.find('.label').addClass('label-danger');
+        $.getJSON("/api/search/episode/" + $par.data("series"),  function(data) {
+
+          if (data && data.Title != "") {
+            $par.find('.label').removeClass('label-danger').addClass('label-primary')
+            ohSnap("<b>Snatched</b><br />" + data.Title, 'success');
+          } else {
+            ohSnap("No release found for " + $par.data("season") + "x" + $par.data("episode"), 'danger');
+          }
+        } )
+        //console.log($par.data("series"), $par.data("season"), $par.data("episode"))
+    })
+
+    $('.glyphicon-user').click(function(){
+      $('.modal-body').html(spinner)
+        $par = $(this).parents('tr');
+        $('#myModal').modal()
+        console.log("/api/manual/episode/" + $par.data("series"))
+        $.getJSON("/api/manual/episode/" + $par.data("series"),  searchEpisode )
+        //console.log($par.data("series"), $par.data("season"), $par.data("episode"))
+    })
+
+    $(document).on("click", ".glyphicon-refresh", function(){
+      $.get("/api/refreshshow/"+ $('body').data("id"), function(data){
+        if (data.status == "success") {
+          ohSnap(data.message, 'success');
+        }
+      })
+    })
+
+    $(document).on("click", ".glyphicon-trash", function(){
+      $.get("/api/deleteshow/" + $('body').data("id"), function(data){
+          window.location.replace("/shows");
+      })
+    })
+
+    $(document).on("click", ".manual-search tr", function(){
+      $el = $(this)
+      $.post('/api/snatch', {"url":$el.data("url"), "title": $el.data("title")}, function(response) {
+    console.log(response)
+}, 'json');
+      // $(this).data("title") $(this).data("url")
+      console.log($(this).parents(".row"))
+    });
+
+console.log("hello")
+
+    $('.expand-season').click(function(){
+      $(this).parents(".row").toggleClass("collapsed")
+      $(this).find('i').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up')
+      console.log($(this).parents(".row"))
+    })
+
+    // $(document).on("click", ".expand-season", function(){
+    //   //$(this).parents(".row").toggleClass("collapsed")
+    //   console.log($(this).parents(".row"))
+    // });
+
+    </script>
+  </body>
+</html>
