@@ -1,15 +1,13 @@
 package gosnatch
 
 import (
-    // "regexp"
     "github.com/astaxie/beego/orm"
+    rss "github.com/jteeuwen/go-pkg-rss"
     _ "github.com/mattn/go-sqlite3"
+    log "github.com/sirupsen/logrus"
     "github.com/spf13/viper"
     "sort"
     "time"
-
-    rss "github.com/jteeuwen/go-pkg-rss"
-    log "github.com/sirupsen/logrus"
 )
 
 // returns a list of rss.item objects
@@ -198,30 +196,30 @@ func DailySearch(force bool) {
         o := orm.NewOrm()
         o.QueryTable(&TvShow{}).All(&shows)
 
-        wanted := map[string][]Release{}
-
         for _, show := range shows {
-
+            wanted := map[int][]Release{}
             for _, rel := range releases {
                 rel.Quality, rel.QualityString = checkQuality(rel)
                 if isValidShowRelease(rel, &show) && isNeededRelease(&rel, &show) {
                     if isGoodRelease(&rel, &show) {
-                        wanted[show.ShowName] = append(wanted[show.ShowName], rel)
+                        if rel.SeasonNum != 0 {
+                            wanted[rel.SeasonNum] = append(wanted[rel.SeasonNum], rel)
+                        } else {
+                            wanted[rel.Episode.Id] = append(wanted[rel.Episode.Id], rel)
+                        }
                     }
                 } else {
                     //fmt.Println(rel.Title)
                 }
             }
 
-            if len(wanted[show.ShowName]) > 0 {
-
-                bestRelease := getBestRelease(wanted[show.ShowName], show.AcceptedQualitys())
-                log.Debugf("best release: %s URL: %s", bestRelease.Title, bestRelease.Link)
+            for k, _ := range wanted {
+                bestRelease := getBestRelease(wanted[k], show.AcceptedQualitys())
                 if bestRelease.Link != "" {
+                    log.Debugf("best release: %s URL: %s", bestRelease.Title, bestRelease.Link)
                     _ = downloadNZB(bestRelease)
                     found = found + 1
                 }
-
             }
 
         }
