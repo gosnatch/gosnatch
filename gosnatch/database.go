@@ -393,12 +393,12 @@ func (rel Release) markSnatched() {
     if len(rel.Season) > 0 {
         for _, e := range rel.Season {
             if e.Season == rel.SeasonNum {
-                e.Status = 1
+                e.Status = STATE_SNATCHED
                 o.Update(&e)
             }
         }
     } else {
-        rel.Episode.Status = 1
+        rel.Episode.Status = STATE_SNATCHED
         o.Update(rel.Episode)
     }
 

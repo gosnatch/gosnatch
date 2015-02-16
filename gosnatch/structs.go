@@ -45,7 +45,7 @@ type Season struct {
 func (s *Season) DownloadStatus() string {
     downloaded := 0
     for _, e := range s.Episodes {
-        if e.Status > 1 {
+        if e.Status == STATE_DOWNLOADED {
             downloaded = downloaded + 1
         }
     }
@@ -56,7 +56,7 @@ func (s *Season) DownloadStatus() string {
 func (s *Season) Percent() int {
     downloaded := 0
     for _, e := range s.Episodes {
-        if e.Status > 1 {
+        if e.Status == STATE_DOWNLOADED {
             downloaded = downloaded + 1
         }
     }

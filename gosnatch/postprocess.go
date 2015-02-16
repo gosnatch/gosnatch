@@ -85,10 +85,10 @@ func (p *PostProcessor) processRelease() {
         _, reldir := path.Split(p.BaseFolder)
         moveto := path.Join(p.history.TvShow.Path, reldir)
         if moveFile(p.BaseFolder, moveto, "move") {
-            p.history.TvEpisode.Status = 2
+            p.history.TvEpisode.Status = STATE_DOWNLOADED
             p.history.TvEpisode.Quality = p.history.Quality
             fmt.Println(p.history.TvEpisode)
-            p.history.Action = 2
+            p.history.Action = STATE_DOWNLOADED
             o.Update(&p.history)
             o.Update(p.history.TvEpisode)
             log.Info("episode marked as downloaded")

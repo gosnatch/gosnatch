@@ -58,7 +58,7 @@ func EpisodeSearch(episodeid int) Release {
     o.LoadRelated(&ep, "TvShow")
 
     //mark as ep as WANTED !
-    ep.Status = 0
+    ep.Status = STATE_WANTED
     o.Update(&ep)
 
     for _, p := range loadProviders("./provider.txt") {

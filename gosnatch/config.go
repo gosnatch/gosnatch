@@ -14,6 +14,11 @@ import (
 const (
     USERAGENT = "gosnatch v0.1"
     VERSION   = "0.1"
+
+    STATE_WANTED     = 0
+    STATE_SNATCHED   = 1
+    STATE_FAILED     = 3
+    STATE_DOWNLOADED = 2
 )
 
 type config struct {
