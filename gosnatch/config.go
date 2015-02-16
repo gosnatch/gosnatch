@@ -117,6 +117,9 @@ func InitConfig() {
 
     if viper.GetBool("LogJSON") {
         log.SetFormatter(&log.JSONFormatter{})
+    } else {
+        x := SafeLogger{&log.TextFormatter{}}
+        log.SetFormatter(&x)
     }
 
     os.MkdirAll(viper.GetString("DataDir"), 0777)

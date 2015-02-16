@@ -23,6 +23,24 @@ func postUrl(url string) {
 
 }
 
+type SafeLogger struct {
+    fmt *log.TextFormatter
+}
+
+func (f *SafeLogger) Format(entry *log.Entry) ([]byte, error) {
+    fmt.Println(entry.Message)
+    fmt.Println((entry.Message))
+    entry.Message = cleanLogMessage(entry.Message)
+    for z, y := range entry.Data {
+        switch y := y.(type) {
+        case string:
+            entry.Data[z] = cleanLogMessage(y)
+        }
+
+    }
+    return f.fmt.Format(entry)
+}
+
 // move a file from oldname to newname, mode can be any of (move, copy, link)
 func moveFile(oldname string, newname string, mode string) bool {
     if mode == "move" {
@@ -271,34 +289,31 @@ func downloadToFile(url string, filepath string) error {
     return nil
 }
 
-// TODO: Move this to Logging... so that EVERY message is checked before it is logged.
-// Also make sure that api keys for known services ar generally replaced
-func CleanLogMessage(message string) string {
+// replace sensitive informations in message currently only strips username OR password
+func cleanLogMessage(message string) string {
     //url styles
     CleaningRules := []string{
-        `(\?|&)(apikey|token|passkey|uid|api)=(?P<secret>[^&=]+?)(&|$)`,                              //newznab
+        `(\?|&)(apikey|token|passkey|uid|api|r)=(?P<secret>[^&=]+?)(&|$)`,                            //newznab
         `(\?|&)[^=]*?(username|password)=(?P<secret>[^&=]+?)(&|$)`,                                   // url append
         `""Name""\s*:\s*""[^""]*(username|password)""\s*,\s*""Value""\s*:\s*""(?P<secret>[^""]+?)""`, //nzbget
     }
 
     // var message string = message
-    newMessage := ""
+    newMessage := message
     for _, regex := range CleaningRules {
+        md := map[string]string{}
         re := regexp.MustCompile(regex)
-        if re.MatchString(message) {
-            n := ""
+        n1 := re.SubexpNames()
+        match := re.FindAllStringSubmatch(message, -1)
+        if len(match) > 0 {
+            for i, n := range match[0] {
 
-            for k, v := range re.SubexpNames() {
-
-                if v != "secret" {
-                    n += fmt.Sprintf("${%d}", k+1)
-                } else {
-                    n += "=<removed>"
+                if n1[i] != "" {
+                    md[n1[i]] = n
                 }
 
             }
-            newMessage = re.ReplaceAllString(message, n)
-            fmt.Println(message, regex, n)
+            newMessage = strings.Replace(newMessage, md["secret"], "<replaced>", -1)
         }
 
     }
