@@ -22,6 +22,7 @@ default: clean depends build
 depends:
 	go get $(GOFLAGS)
 	go get github.com/jteeuwen/go-bindata && go install github.com/jteeuwen/go-bindata/go-bindata
+	go get -u github.com/nicksnyder/go-i18n/goi18n
 
 assets: $(ASSET_DIRS)
 	go-bindata -pkg gosnatch -o gosnatch/bindata.go $(ASSET_DIRS)
