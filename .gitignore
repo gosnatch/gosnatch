@@ -3,4 +3,3 @@ data
 gosnatch.out
 dist
 public
-bindata.go
