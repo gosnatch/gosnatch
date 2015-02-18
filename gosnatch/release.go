@@ -95,11 +95,11 @@ func checkQuality(r Release) (quality int, quaityname string) {
         return 5, "1080p HD TV"
     }
 
-    if checkName([]string{"720p", "web.?dl|webrip|ituneshd|webhd(rip)?"}, r.Title) || checkName([]string{"720p", "(webhd|itunes)", "(h|x).?264"}, r.Title) {
+    if checkName([]string{"720p", "web.?dl|webrip|ituneshd|webhd(rip)?|netflixhd"}, r.Title) || checkName([]string{"720p", "(webhd|itunes)", "(h|x).?264"}, r.Title) {
         return 6, "720p WEB-DL"
     }
 
-    if checkName([]string{"1080p", "(webhd|itunes)", "(h|x).?264"}, r.Title) || checkName([]string{"1080p", "web.?dl|webrip|webhd(rip)?"}, r.Title) {
+    if checkName([]string{"1080p", "(webhd|itunes)", "(h|x).?264"}, r.Title) || checkName([]string{"1080p", "web.?dl|webrip|webhd(rip)?|netflixhd"}, r.Title) {
         return 7, "1080p WEB-DL"
     }
 
