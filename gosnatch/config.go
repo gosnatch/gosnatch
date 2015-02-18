@@ -38,7 +38,8 @@ type config struct {
 
 var C config
 
-var validMovieExtensions = []string{"mkv", "mp4", "mov", "avi"}
+var validMovieExtensions = []string{"mkv", "mp4", "mov", "mpg", "mpeg", "wmv", "ogm", "iso", "img", "divx", "m2ts", "m4v", "ts", "flv", "f4v", "rmvb", "vob", "dvr-ms", "wtv", "ogv", "3gp", "webm", "avi"}
+var subtitleExtensions = []string{"srt", "sub", "ass", "idx", "ssa"}
 
 func saveConfig(cfgpath string) error {
 
