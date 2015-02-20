@@ -293,8 +293,8 @@ type QualityDefinitions struct {
     Id      int    `orm:"auto"`
     Quality int    `orm:"null"`
     Title   string `orm:"null"`
-    MinSize int    `orm:"null"`
-    MaxSize int    `orm:"null"`
+    MinSize int64  `orm:"null"`
+    MaxSize int64  `orm:"null"`
 }
 
 // check if the given quality is in the given QualutyPreset
@@ -352,6 +352,7 @@ type History struct {
     Title         string              `orm:"null"`
     Link          string              `orm:"null"`
     Version       int                 `orm:"null"`
+    RelId         string              `orm:"null"`
     Provider      *NewznabProvider    `orm:"null;rel(fk)"`
     Quality       *QualityDefinitions `orm:"null;rel(fk)"`
     TvShow        *TvShow             `orm:"null;rel(fk)"` //optinal series link
@@ -360,10 +361,12 @@ type History struct {
 
 // holds a single Release
 type Release struct {
+    Id            string
     Title         string
     Link          string
     Quality       int
     QualityString string
+    Size          int64
     Provider      Provider
     Status        int // 1 = snatched, 2 = downloaded, 3 = failed
     Episode       *TvEpisode
@@ -384,6 +387,46 @@ func (a ByQuality) Swap(i, j int) {
 
 func (a ByQuality) Less(i, j int) bool {
     return a[i].Quality < a[j].Quality
+}
+
+//checks if a given release has previously failed
+func (rel *Release) hasFailed() bool {
+    log.Debug("checking if release has previously failed")
+    o := orm.NewOrm()
+    fail := History{}
+    if rel.Id != "" {
+        o.QueryTable(&History{}).Filter("rel_id", rel.Id).Filter("action", STATE_FAILED).One(&fail)
+    } else {
+        o.QueryTable(&History{}).Filter("link", rel.Link).Filter("action", STATE_FAILED).One(&fail)
+    }
+
+    if fail.Id != 0 {
+        log.Debug("release failed previously, skipping")
+        return true
+    }
+    return false
+}
+
+// check if release is between min and max byte size for quality
+// TODO: make this somehow depend on Episode length!
+func (rel *Release) checkFilesize() bool {
+    o := orm.NewOrm()
+    quali := QualityDefinitions{}
+    o.QueryTable(&QualityDefinitions{}).Filter("quality", rel.Quality).One(&quali)
+
+    if quali.MinSize > 0 && quali.MaxSize > 0 && rel.Size > 0 {
+        log.Debug("checking if filesize matches quality size presets", quali, rel)
+        if quali.MaxSize > rel.Size && quali.MinSize < rel.Size {
+            log.WithFields(log.Fields{"quality": rel.QualityString, "release": rel.Title, "size": humanize.Bytes(uint64(rel.Size)), "min": humanize.Bytes(uint64(quali.MinSize)), "max": humanize.Bytes(uint64(quali.MaxSize))}).Debug("filesize is in valid range")
+            return true
+        } else {
+            log.WithFields(log.Fields{"size": rel.Size, "min": quali.MinSize, "max": quali.MaxSize}).Debug("filesize not in valid range")
+            return false
+        }
+    } else {
+        log.Debug("no filesize for release or quality preset found... skipping filesize check")
+        return true
+    }
 }
 
 // mark release as snatched
@@ -416,6 +459,7 @@ func (rel Release) markSnatched() {
                 hist.Title = rel.Title
                 hist.Action = STATE_SNATCHED
                 hist.ProviderName = rel.Provider.Name
+                hist.RelId = rel.Id
 
                 quali := QualityDefinitions{}
                 o.QueryTable(&QualityDefinitions{}).Filter("quality", rel.Quality).One(&quali)
@@ -432,7 +476,7 @@ func (rel Release) markSnatched() {
         hist := History{}
         hist.Season = rel.Episode.Season
         hist.Episode = rel.Episode.Episode
-
+        hist.RelId = rel.Id
         hist.Title = rel.Title
         hist.Action = STATE_SNATCHED
         hist.ProviderName = rel.Provider.Name

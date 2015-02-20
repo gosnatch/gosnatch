@@ -196,6 +196,11 @@ func getBestRelease(rels []Release, quali []int) Release {
 
 // checks if current release is a needed release for given show
 func isNeededRelease(release *Release, show *TvShow) bool {
+
+    if release.hasFailed() {
+        return false
+    }
+
     wanted := show.Wanted()
 
     md := map[string]string{}

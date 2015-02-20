@@ -39,8 +39,10 @@ func getReleasesFromRss(newitems []*rss.Item) []Release {
 
     for _, v := range newitems {
         cur := Release{}
+        cur.Id = v.Id
         cur.Title = v.Title
         cur.Link = v.Enclosures[0].Url
+        cur.Size = v.Enclosures[0].Length
         releases = append(releases, cur)
     }
     // fmt.Println(releases)
@@ -82,7 +84,10 @@ func EpisodeSearch(episodeid int) Release {
             r.Quality, r.QualityString = checkQuality(r)
 
             if isValidShowRelease(r, ep.TvShow) && isNeededRelease(&r, ep.TvShow) {
-                releases = append(releases, r)
+                if r.checkFilesize() {
+                    releases = append(releases, r)
+                }
+
             }
         }
 
