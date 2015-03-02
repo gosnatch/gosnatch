@@ -130,7 +130,7 @@ func StartWebserver() {
     }
 
     // load templates from bin data!
-    tmpl := loadTemplates("script.tmpl", "calendar.tmpl", "addSeries.tmpl", "history.tmpl", "shows.tmpl", "show.tmpl", "settings.tmpl", "presets.tmpl")
+    tmpl := loadTemplates("_script.tmpl", "_header.tmpl", "calendar.tmpl", "addSeries.tmpl", "history.tmpl", "shows.tmpl", "show.tmpl", "settings.tmpl", "presets.tmpl")
     // router.LoadHTMLGlob("assets/templates/*")
     router.SetHTMLTemplate(tmpl)
 
@@ -143,6 +143,8 @@ func StartWebserver() {
     {
         api.GET("/series/lookup/:term", func(c *gin.Context) {
             showname := c.Params.ByName("term")
+            limit := c.Request.URL.Query().Get("limit")
+            limitint, _ := strconv.Atoi(limit)
             result := []*tvdb.Series{}
             if strings.HasPrefix(showname, "tvdb:") {
                 str := strings.Split(showname, ":")
@@ -171,7 +173,12 @@ func StartWebserver() {
                 result := gin.H{"error": msg}
                 c.JSON(200, result)
             } else {
-                c.JSON(200, result)
+                if limitint > 0 {
+                    c.JSON(200, result[0:limitint])
+                } else {
+                    c.JSON(200, result)
+                }
+
             }
 
         })
