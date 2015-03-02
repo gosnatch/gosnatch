@@ -1,11 +1,6 @@
  {{template "header"}}
 
     <div class="container" style="padding-top: 50px;">
-
-
-
-      <div class="row season-1">
-        <div class="col-sm-12">
           <div class="table-responsive">
             <table id="history" class="table">
               <thead>
@@ -41,8 +36,6 @@
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
 
 
 
@@ -57,13 +50,18 @@
     <script src="/assets/js/vendor/jquery.ba-throttle-debounce.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/external/ohsnap.js"></script>
-    <script src="/assets/js/external/jquery.dataTables.min.js"></script>
-    <script src="/assets/js/external/dataTables.bootstrap.min.js"></script>
+    <script src="/assets/js/external/jquery.dynatable.js"></script>
     <script src="/assets/js/main.js"></script>
     {{template "script"}}
     <script>
       $(document).ready(function() {
-        $('#history').dataTable();
+        $('#history').dynatable({
+          inputs: {
+      paginationClass: 'pagination',
+      paginationActiveClass: 'active',
+      paginationDisabledClass: 'disabled'
+    }
+        });
       });
 
     </script>

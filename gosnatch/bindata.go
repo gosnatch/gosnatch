@@ -239,6 +239,24 @@ func assets_js_external_jquery_datatables_min_js() (*asset, error) {
 	return a, err
 }
 
+// assets_js_external_jquery_dynatable_js reads file data from disk. It returns an error on failure.
+func assets_js_external_jquery_dynatable_js() (*asset, error) {
+	path := "/Users/workstation/golang/src/github.com/gosnatch/gosnatch/assets/js/external/jquery.dynatable.js"
+	name := "assets/js/external/jquery.dynatable.js"
+	bytes, err := bindata_read(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
 // assets_js_external_moment_min_js reads file data from disk. It returns an error on failure.
 func assets_js_external_moment_min_js() (*asset, error) {
 	path := "/Users/workstation/golang/src/github.com/gosnatch/gosnatch/assets/js/external/moment.min.js"
@@ -459,6 +477,24 @@ func assets_css_font_awesome_min_css() (*asset, error) {
 func assets_css_fullcalendar_min_css() (*asset, error) {
 	path := "/Users/workstation/golang/src/github.com/gosnatch/gosnatch/assets/css/fullcalendar.min.css"
 	name := "assets/css/fullcalendar.min.css"
+	bytes, err := bindata_read(path, name)
+	if err != nil {
+		return nil, err
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		err = fmt.Errorf("Error reading asset info %s at %s: %v", name, path, err)
+	}
+
+	a := &asset{bytes: bytes, info: fi}
+	return a, err
+}
+
+// assets_css_jquery_dynatable_css reads file data from disk. It returns an error on failure.
+func assets_css_jquery_dynatable_css() (*asset, error) {
+	path := "/Users/workstation/golang/src/github.com/gosnatch/gosnatch/assets/css/jquery.dynatable.css"
+	name := "assets/css/jquery.dynatable.css"
 	bytes, err := bindata_read(path, name)
 	if err != nil {
 		return nil, err
@@ -1192,6 +1228,7 @@ var _bindata = map[string]func() (*asset, error){
 	"assets/js/external/dataTables.bootstrap.min.js": assets_js_external_datatables_bootstrap_min_js,
 	"assets/js/external/fullcalendar.min.js": assets_js_external_fullcalendar_min_js,
 	"assets/js/external/jquery.dataTables.min.js": assets_js_external_jquery_datatables_min_js,
+	"assets/js/external/jquery.dynatable.js": assets_js_external_jquery_dynatable_js,
 	"assets/js/external/moment.min.js": assets_js_external_moment_min_js,
 	"assets/js/external/ohsnap.js": assets_js_external_ohsnap_js,
 	"assets/js/vendor/.DS_Store": assets_js_vendor_ds_store,
@@ -1205,6 +1242,7 @@ var _bindata = map[string]func() (*asset, error){
 	"assets/css/dataTables.bootstrap.css": assets_css_datatables_bootstrap_css,
 	"assets/css/font-awesome.min.css": assets_css_font_awesome_min_css,
 	"assets/css/fullcalendar.min.css": assets_css_fullcalendar_min_css,
+	"assets/css/jquery.dynatable.css": assets_css_jquery_dynatable_css,
 	"assets/css/mixins.less": assets_css_mixins_less,
 	"assets/css/style.css": assets_css_style_css,
 	"assets/css/style.less": assets_css_style_less,
@@ -1300,6 +1338,8 @@ var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
 			}},
 			"fullcalendar.min.css": &_bintree_t{assets_css_fullcalendar_min_css, map[string]*_bintree_t{
 			}},
+			"jquery.dynatable.css": &_bintree_t{assets_css_jquery_dynatable_css, map[string]*_bintree_t{
+			}},
 			"mixins.less": &_bintree_t{assets_css_mixins_less, map[string]*_bintree_t{
 			}},
 			"style.css": &_bintree_t{assets_css_style_css, map[string]*_bintree_t{
@@ -1372,6 +1412,8 @@ var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
 				"fullcalendar.min.js": &_bintree_t{assets_js_external_fullcalendar_min_js, map[string]*_bintree_t{
 				}},
 				"jquery.dataTables.min.js": &_bintree_t{assets_js_external_jquery_datatables_min_js, map[string]*_bintree_t{
+				}},
+				"jquery.dynatable.js": &_bintree_t{assets_js_external_jquery_dynatable_js, map[string]*_bintree_t{
 				}},
 				"moment.min.js": &_bintree_t{assets_js_external_moment_min_js, map[string]*_bintree_t{
 				}},
