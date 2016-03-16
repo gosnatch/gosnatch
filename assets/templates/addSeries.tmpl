@@ -249,7 +249,7 @@
         } else {
 
           for (var i = 0; i < data.length; i++) {
-          new_html = new_html + '<div class="search-result-block"><div class="row"><div class="col-sm-2"><img src="https://tvdb.gosnatch.me/banners/' + data[i].Poster + '" class="img-responsive hidden-xs"><img src="https://tvdb.gosnatch.me/banners/' + data[i].Banner + '" class="img-responsive visible-xs"></div><div class="col-sm-8"><h2>' + data[i].SeriesName + '<span class="hidden-xs"> (' + data[i].FirstAired + ')</span></h2><p>' + data[i].Overview + '</p><div class="add-info-wrapper row">'
+          new_html = new_html + '<div class="search-result-block"><div class="row"><div class="col-sm-2"><img src="http://tvdb.cytec.us/banners/' + data[i].Poster + '" class="img-responsive hidden-xs"><img src="http://tvdb.cytec.us/banners/' + data[i].Banner + '" class="img-responsive visible-xs"></div><div class="col-sm-8"><h2>' + data[i].SeriesName + '<span class="hidden-xs"> (' + data[i].FirstAired + ')</span></h2><p>' + data[i].Overview + '</p><div class="add-info-wrapper row">'
 
           new_html = new_html + folder(data[i].Id) + preset(data[i].Id) + languageHTML() + '<div class="col-sm-2 form-group"><label></label><button class="btn btn-success x-add" id="' + data[i].Id +'"><i class="fa fa-plus"></i> Add </button></div></div></div></div></div>'
         }

@@ -43,7 +43,7 @@ var subtitleExtensions = []string{"srt", "sub", "ass", "idx", "ssa"}
 
 func saveConfig(cfgpath string) error {
 
-    viper.Marshal(&C)
+    viper.Unmarshal(&C)
 
     b, err := json.MarshalIndent(C, "", "    ")
     if err != nil {
@@ -93,8 +93,8 @@ func InitConfig() {
     viper.SetDefault("LogJSON", false)
     viper.SetDefault("Language", "en-US")
     viper.SetDefault("Devel", false)
-    viper.SetDefault("TvdbUrl", "https://tvdb.gosnatch.me")
-    viper.SetDefault("TvdbKey", "BTLPI2H0LITPW71J") //goSnatch's api key
+    viper.SetDefault("TvdbUrl", "http://tvdb.cytec.us")
+    viper.SetDefault("TvdbKey", "CLQE0GZFEW23DBVZ") //goSnatch's api key
     viper.SetDefault("ApiKey", randSeq(20))
     viper.SetDefault("SearchFrequency", 20)
     viper.SetDefault("NamingPattern", "Season {{.SeasonNumber}}/{{.ShowName}}")

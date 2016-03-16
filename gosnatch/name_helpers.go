@@ -82,7 +82,7 @@ func UpadeShowExceptions() {
 func getAllExceptions() (map[string][]string, error) {
     data := map[string][]string{}
 
-    body, _ := getUrl("https://tvdb.gosnatch.me/v2/names")
+    body, _ := getUrl("http://tvdb.cytec.us/v2/names")
 
     err := json.Unmarshal(body, &data)
 
@@ -96,7 +96,7 @@ func getAllExceptions() (map[string][]string, error) {
 
 //TODO: use getAll and try to access tvdbid in map if not in map return empty without an error!
 func getShowExceptions(tvdbid int) ([]string, error) {
-    url := fmt.Sprintf("https://tvdb.gosnatch.me/v2/names/%d", tvdbid)
+    url := fmt.Sprintf("http://tvdb.cytec.us/v2/names/%d", tvdbid)
 
     body, _ := getUrl(url)
 

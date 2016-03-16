@@ -155,7 +155,8 @@ func (t *TVDB) GetSeries(name, language string) ([]*Series, error) {
     if language != "" {
         args.Add("language", language)
     }
-
+    fmt.Println("getting ifo....")
+    fmt.Println(fmt.Sprintf("%s/api/GetSeries.php?%s", t.Location, args.Encode()))
     r, err := http.Get(fmt.Sprintf("%s/api/GetSeries.php?%s", t.Location, args.Encode()))
     if err != nil {
         return nil, err
@@ -164,6 +165,7 @@ func (t *TVDB) GetSeries(name, language string) ([]*Series, error) {
 
     var d *SeriesData
     err = xml.NewDecoder(r.Body).Decode(&d)
+    fmt.Println(r.Body)
     if err != nil {
         return nil, err
     }

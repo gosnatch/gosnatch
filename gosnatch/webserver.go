@@ -28,7 +28,7 @@ func ApiKeyRequired() gin.HandlerFunc {
         key := c.Request.Header.Get("X-Api-Key")
         //should use config api key and send to all requests...
         if key != viper.GetString("ApiKey") {
-            c.Fail(401, fmt.Errorf("%s", "Unknown Api Key"))
+            c.JSON(401, fmt.Errorf("%s", "Unknown Api Key"))
         }
 
     }
@@ -66,7 +66,7 @@ func (b *binaryFileSystem) Exists(prefix string, filepath string) bool {
 }
 
 func BinaryFileSystem(root string) *binaryFileSystem {
-    fs := &assetfs.AssetFS{Asset, AssetDir, root}
+    fs := &assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, AssetInfo: AssetInfo, Prefix: "assets"}
     return &binaryFileSystem{
         fs,
     }
